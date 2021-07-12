@@ -120,7 +120,6 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
 	if (IsUnitOfficer(UnitState))
 	{
 		NameSet = `GETMCMVAR(OFFICER_RANK_NAME_SET);
-		`LOG(GetFuncName() @ "unit is officer" @ `GETMCMVAR(OFFICER_RANK_NAME_SET) @ NameSet,, 'IRITEST');
 		DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(OFFICER_RANK_NAME_SET), Rank);
 	}
 	else 
@@ -146,7 +145,6 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
 		else
 		{
 			NameSet = `GETMCMVAR(SOLDIER_RANK_NAME_SET);
-			`LOG(GetFuncName() @ "unit is soldier" @ `GETMCMVAR(SOLDIER_RANK_NAME_SET) @ NameSet,, 'IRITEST');
 			DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(NameSet, Rank);
 		}
 	}

@@ -47,14 +47,8 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
 	foreach ClassTemplates(ClassTemplate)
 	{
-		`LOG("Looking at:" @ ClassTemplate.DataName @ ClassTemplate.DisplayName,, 'IRITEST');
-		`LOG("0:" @ default.SkipSoldierClassesFromDetection[0],, 'IRITEST');
-		`LOG("1:" @ default.SkipSoldierClassesFromDetection[1],, 'IRITEST');
-
 		if (default.SkipSoldierClassesFromDetection.Find(ClassTemplate.DataName) != INDEX_NONE)
 				continue;
-
-		`LOG("It's not in the exclusion array",, 'IRITEST');
 
 		if (ClassTemplate.RankIcons.Length > 2)
 		{
@@ -62,13 +56,11 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 			{
 				if (OutArray.Find(ClassTemplate.DisplayName) == INDEX_NONE)
 				{
-					`LOG("Adding:" @ ClassTemplate.DisplayName @ "to array",, 'IRITEST');
 					OutArray.AddItem(ClassTemplate.DisplayName);
 				}
 			}
 			else if (OutArray.Find(string(ClassTemplate.DataName)) == INDEX_NONE)
 			{
-				`LOG("Adding:" @ ClassTemplate.DataName @ "to array",, 'IRITEST');
 				OutArray.AddItem(string(ClassTemplate.DataName));
 			}
 		}

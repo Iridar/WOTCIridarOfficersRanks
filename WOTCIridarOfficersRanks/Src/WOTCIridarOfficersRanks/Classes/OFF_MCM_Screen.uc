@@ -224,8 +224,6 @@ simulated function SaveButtonClicked(MCM_API_SettingsPage Page)
 	SKIRMISHER_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateNameByLocName(loc_SKIRMISHER_RANK_NAME_SET);
 	TEMPLAR_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateNameByLocName(loc_TEMPLAR_RANK_NAME_SET);
 
-	`LOG("Saving SOLDIER_RANK_NAME_SET as:" @ SOLDIER_RANK_NAME_SET,, 'IRITEST');
-
 	OFFICER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateNameByLocName(loc_OFFICER_RANK_ICON_SET);
 	SOLDIER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateNameByLocName(loc_SOLDIER_RANK_ICON_SET);
 	REAPER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateNameByLocName(loc_REAPER_RANK_ICON_SET);
