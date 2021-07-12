@@ -98,7 +98,6 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
     local XComLWTuple Tuple;
     local int Rank;
     local string DisplayRankName;
-	local string NameSet;
 
 	UnitState = XComGameState_Unit(EventSource);
 	if (UnitState == none)
@@ -119,7 +118,6 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
 
 	if (IsUnitOfficer(UnitState))
 	{
-		NameSet = `GETMCMVAR(OFFICER_RANK_NAME_SET);
 		DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(OFFICER_RANK_NAME_SET), Rank);
 	}
 	else 
@@ -144,8 +142,7 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
 		}
 		else
 		{
-			NameSet = `GETMCMVAR(SOLDIER_RANK_NAME_SET);
-			DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(NameSet, Rank);
+			DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(SOLDIER_RANK_NAME_SET), Rank);
 		}
 	}
 
