@@ -47,8 +47,8 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
 	foreach ClassTemplates(ClassTemplate)
 	{
-		if (default.SkipSoldierClassesFromDetection.Find(ClassTemplate.DataName) != INDEX_NONE)
-			continue;
+		if (class'X2EventListener_Officer'.default.SkipSoldierClasses.Find(ClassTemplate.DataName) != INDEX_NONE)
+				continue;
 
 		if (ClassTemplate.RankNames.Length > 2) // >2 to catch DLC Shen and Central
 		{
@@ -72,6 +72,16 @@ static final function string GetRankNameTemplateLocName(const string TemplateNam
 
 	local X2SoldierClassTemplateManager	ClassMgr;
 	local X2SoldierClassTemplate		ClassTemplate;
+
+	switch (TemplateName)
+	{
+		case "NoReplacement":
+			return class'OFF_MCM_Screen'.default.strNoReplacement;
+		case "Default":
+			return class'OFF_MCM_Screen'.default.strDefault;
+		default:
+			break;
+	}
 
 	RankNameTemplate = GetRankNameTemplateManager().FindRankNameTemplate(name(TemplateName));
 	if (RankNameTemplate != none)
@@ -107,8 +117,15 @@ static final function string GetRankNameTemplateNameByLocName(const string FindL
 	local X2SoldierClassTemplate		ClassTemplate;
 	local array<X2SoldierClassTemplate>	ClassTemplates;
 
-	if (FindLocName == class'OFF_MCM_Screen'.default.strNoReplacement)
-		return "";
+	switch (FindLocName)
+	{
+		case class'OFF_MCM_Screen'.default.strNoReplacement:
+			return "NoReplacement";
+		case class'OFF_MCM_Screen'.default.strDefault:
+			return "Default";
+		default:
+			break;
+	}
 
 	Mgr = GetRankNameTemplateManager();
 
@@ -123,6 +140,9 @@ static final function string GetRankNameTemplateNameByLocName(const string FindL
 	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
 	foreach ClassTemplates(ClassTemplate)
 	{
+		if (class'X2EventListener_Officer'.default.SkipSoldierClasses.Find(ClassTemplate.DataName) != INDEX_NONE)
+				continue;
+
 		if (ClassTemplate.DisplayName == FindLocName || ClassTemplate.DataName == name(FindLocName))
 		{
 			return string(ClassTemplate.DataName);

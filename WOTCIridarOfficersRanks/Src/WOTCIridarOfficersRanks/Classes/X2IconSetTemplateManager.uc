@@ -47,10 +47,10 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
 	foreach ClassTemplates(ClassTemplate)
 	{
-		if (default.SkipSoldierClassesFromDetection.Find(ClassTemplate.DataName) != INDEX_NONE)
+		if (class'X2EventListener_Officer'.default.SkipSoldierClasses.Find(ClassTemplate.DataName) != INDEX_NONE)
 				continue;
 
-		if (ClassTemplate.RankIcons.Length > 2)
+		if (ClassTemplate.RankIcons.Length > 2) // >2 to catch DLC Shen and Central
 		{
 			if (ClassTemplate.DisplayName != "")
 			{
@@ -73,6 +73,16 @@ static final function string GetIconSetTemplateLocName(const string TemplateName
 
 	local X2SoldierClassTemplateManager	ClassMgr;
 	local X2SoldierClassTemplate		ClassTemplate;
+
+	switch (TemplateName)
+	{
+		case "NoReplacement":
+			return class'OFF_MCM_Screen'.default.strNoReplacement;
+		case "Default":
+			return class'OFF_MCM_Screen'.default.strDefault;
+		default:
+			break;
+	}
 
 	IconSetTemplate = GetIconSetTemplateManager().FindIconSetTemplate(name(TemplateName));
 	if (IconSetTemplate != none)
@@ -107,9 +117,16 @@ static final function string GetIconSetTemplateNameByLocName(const string FindLo
 	local X2SoldierClassTemplateManager	ClassMgr;
 	local X2SoldierClassTemplate		ClassTemplate;
 	local array<X2SoldierClassTemplate>	ClassTemplates;
-
-	if (FindLocName == class'OFF_MCM_Screen'.default.strNoReplacement)
-		return "";
+	
+	switch (FindLocName)
+	{
+		case class'OFF_MCM_Screen'.default.strNoReplacement:
+			return "NoReplacement";
+		case class'OFF_MCM_Screen'.default.strDefault:
+			return "Default";
+		default:
+			break;
+	}
 
 	Mgr = GetIconSetTemplateManager();
 
@@ -124,6 +141,9 @@ static final function string GetIconSetTemplateNameByLocName(const string FindLo
 	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
 	foreach ClassTemplates(ClassTemplate)
 	{
+		if (class'X2EventListener_Officer'.default.SkipSoldierClasses.Find(ClassTemplate.DataName) != INDEX_NONE)
+				continue;
+
 		if (ClassTemplate.DisplayName == FindLocName || ClassTemplate.DataName == name(FindLocName))
 		{
 			return string(ClassTemplate.DataName);

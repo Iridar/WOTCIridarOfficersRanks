@@ -3,63 +3,72 @@
 More info here: https://www.patreon.com/Iridar
 
 
-
-TODO:
-Detect officers by ability templates, needed for RPGO
-How do we handle sparks?- as individual class.
-Per-class config for rank replacements? ("Use global settings by default")
-Return drop down lists, maybe?
-
 [WOTC] Iridar's Cosmetic Rank Replacer
 
-This mod changes rank names and rank icons for XCOM soldiers, faction heroes and trained officers[b]*[/b].
+This mod replaces rank names and rank icons for XCOM soldiers. 
 
-The mod includes several icon sets and rank name sets. They can be selected separately through Mod Config Menu.
+[h1]DEFAULT BEHAVIOR[/h1]
 
-Plugin mods can potentially add more icon sets and rank name sets for this mod.
+By default, the mod replaces rank names and rank icons for XCOM soldiers and faction heros - each faction gets their own set, thematic and immersive.
 
-[b]*[/b] - which soldiers count as officers is configurable through configuration files. By default the mod will pick up LWOTC Officers and all variations of officers created by 
+If you have any officers, such as those from the [b][url=][WOTC] Iridar's Officer Training[/url][/b] or [b][url=][WOTC] Iridar's Officer Class[/url][/b], they will get their own unique set as well. Ranking officer in squad will also be highlighted in [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1122974240]WotC: robojumper's Squad Select[/url][/b].
+
+[h1]MCM CONFIGURATION[/h1]
+
+The mod is very configurable through the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=667104300][b][WotC] Mod Config Menu[/b][/url].
+
+Rank name sets and rank icon sets can be selected separately from each other. You can select global rank name and rank icon sets for whole groups of soldiers, or individually for every soldier class.
+
+The mod includes several icon sets and rank name sets, and more can be added by plugin mods. If any soldiers classes add their own rank name or rank icon sets, like Psi Operatives, the mod will automatically pick them up and allow you to assign them to different classes.
+
+So, for example, if you want Templars to use Psi Operative rank names and/or rank icons, you can do that. Or assign knight-themed SPARK rank name and rank icon sets to a Paladin class.
+
+You can also toggle which soldier classes count as officers. 
 
 [h1]REQUIREMENTS[/h1]
 
 Safe to add or remove mid-campaign.
 
-[list]
-[*][url=https://steamcommunity.com/workshop/filedetails/?id=1134256495][b]X2 WOTC Community Highlander[/b][/url] of any version.
-[*][url=][b]Community Promotion Screen[/b][/url]
-[/list]
+[list][*][url=https://steamcommunity.com/workshop/filedetails/?id=1134256495][b]X2 WOTC Community Highlander[/b][/url] of any version is required.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=667104300][b][WotC] Mod Config Menu[/b][/url] - optional.[/list]
 
-[h1]COMPATIBILITY[/h1]
+This mod relies on the Highlander to replace rank names and rank icons, but the interface elements that actually display the soldier ranks must also support that Highlander functionality.
+
+Some mods can potentially add their own UI without using the Highlander methods to get soldier rank name and rank icon, and in that case you will see the old ranks in some parts of the game.
 
 [b]WORKS WITH[/b][list]
-[*] Musashi's RPG Overhaul
-[*] Community Promotion Screen
-[*] No Promotion Screen Mods[/list]
+[*] [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1280477867]Musashi's RPG Overhaul[/url][/b]
+[*] [b][url=][WOTC] Community Promotion Screen[/url][/b][/list]
 
 [b]DOES NOT WORK WITH[/b][list]
-[*] New Promotion Screen By Default - nothing can be done about that, please don't ask.[/list]
+[*] [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1124609091][WOTC] New Promotion Screen By Default[/url][/b] - use Community Promotion Screen instead.[/list]
 
 [h1]COMPANION MODS[/h1]
-[list]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=667104300][b][WotC] Mod Config Menu[/b][/url] - can be used to select which rank icon sets and rank name sets you want to use for your soldiers.
-[/list]
+
+LWOTC Officers, as well as officers from the mods below, will be automatically picked up by the Rank Replacer and receive the new rank names and rank icons. While this mod is extremely robust and offers unprecedented levels of customization, separating soldier and officer rank names and rank icons is actually its primary intended purpose.
+
+[list][*] [b][url=][WOTC] Iridar's Officer Training[/url][/b]
+[*] [b][url=][WOTC] Iridar's Officer Class[/url][/b]
+[b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1280477867]Musashi's RPG Overhaul[/url][/b] + [b][url=][WOTC] Iridar's Officer Perk Pack[/url][/b]
+[*] [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1126186107][WOTC] - K's Officer Class[/url][/b]
+[*] [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1241073845][WOTC] - K's Officer Class (Alternative)[/url][/b][/list]
 
 [h1]CONFIGURATION[/h1]
 
 This mod's config folder can be found at:
 [code]..\steamapps\workshop\content\268500\2391820069\Config[/code]
 
-You can use Mod Config Menu to select different Icon and Rank Name sets for specific soldier groups. 
-If you for some reason don't use MCM, you can configure this by hand in [b]XComWOTCIridarOfficersCore_DEFAULT.ini[/b] file.
+If you for some reason don't use MCM, you can configure this mod by hand in [b]XComWOTCIridarOfficersRanks_DEFAULT.ini[/b] file.
 
-Order of rank icons is configured in [b]XComRankChanges.ini[/b].
+New rank icon and rank name sets can be set up through [b]XComRankChanges.ini[/b] and localization files. It also offers more configuration options for determining which soldiers count as officers.
 
 [h1]CREDITS AND DONATIONS[/h1]
 
 Credits to:
+Russian translation by XCOMrades.
 Veehementia, lago508, Chris the Thin Mint, Arkhangel for help with brainstorming new rank names.
 Veehementia for help with rank icons, particularly the Legion set.
-Lt. Koukassi for ranks and icons, taken with permission from: https://steamcommunity.com/sharedfiles/filedetails/?id=1130154571 and https://steamcommunity.com/sharedfiles/filedetails/?id=1126186107
+Lt. Koukassi for ranks and icons, taken with permission from: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1130154571][b][WOTC] - K's Rank Changes - Military[/b][/url] and [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1126186107][WOTC] - K's Officer Class[/url][/b].
 Pavonis Interactive for LW2 ranks and icons.
 
 Huge thanks to my wonderful patrons who have patiently waited for me to finish this mod even though I was supposed to do something completely different. Please consider [b][url=https://www.patreon.com/Iridar]supporting me on Patreon[/url][/b] if you require tech support, have a suggestion for a feature, or simply wish to help me create more awesome mods.

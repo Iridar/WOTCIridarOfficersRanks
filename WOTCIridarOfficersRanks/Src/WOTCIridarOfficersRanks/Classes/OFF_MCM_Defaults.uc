@@ -6,6 +6,13 @@ struct ClassIsOfficerStruct
 	var bool bOfficer;
 };
 
+struct IndividualClassConfigStruct
+{
+	var name TemplateName;
+	var string RankNameSet;
+	var string RankIconSet;
+};
+
 var config int VERSION_CFG;
 
 var config string OFFICER_RANK_NAME_SET;
@@ -36,3 +43,4 @@ var config bool REPLACE_CLASS_UNIQUE_RANKS;
 var config bool MARK_OFFICER_IN_SQUAD_SELECT;
 
 var config array<ClassIsOfficerStruct> OFFICER_CLASSES;
+var config array<IndividualClassConfigStruct> INDIVIDUAL_CLASS_CONFIG;

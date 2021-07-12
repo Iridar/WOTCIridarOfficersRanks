@@ -8,6 +8,9 @@ static final function string GetIconForRank(const string TemplateName, const int
 	local X2IconSetTemplate Template;
 	local X2SoldierClassTemplate ClassTemplate;
 
+	if (TemplateName == "")
+		return "";
+
 	Template = class'X2IconSetTemplateManager'.static.GetIconSetTemplateManager().FindIconSetTemplate(name(TemplateName));
 	if (Template != none)
 	{

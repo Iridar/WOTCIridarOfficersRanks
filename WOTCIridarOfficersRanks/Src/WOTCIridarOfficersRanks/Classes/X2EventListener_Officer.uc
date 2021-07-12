@@ -4,7 +4,7 @@ var config array<name> OfficerUnitValues;
 var config array<name> OfficerCharacterTemplates;
 var config array<name> OfficerSoldierClasses;
 var config array<name> OfficerAbilities;
-var config array<name> SkipOfficerSoldierClasses;
+var config array<name> SkipSoldierClasses;
 
 var localized string strCommandingOfficer;
 
@@ -98,13 +98,14 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
     local XComLWTuple Tuple;
     local int Rank;
     local string DisplayRankName;
+	local string SetName;
 
 	UnitState = XComGameState_Unit(EventSource);
 	if (UnitState == none)
 		return ELR_NoInterrupt;
 
 	ClassTemplate = UnitState.GetSoldierClassTemplate();
-	if (ClassTemplate == none || ClassTemplate.RankNames.Length > 0 && !`GETMCMVAR(REPLACE_CLASS_UNIQUE_RANKS))
+	if (ClassTemplate == none )
 		return ELR_NoInterrupt;
 
 	Tuple = XComLWTuple(EventData);
@@ -116,35 +117,44 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
 		Rank = UnitState.GetRank();
 	}
 
-	if (IsUnitOfficer(UnitState))
+	if (!GetIndividualConfigRankNameSetName(ClassTemplate.DataName, SetName))
 	{
-		DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(OFFICER_RANK_NAME_SET), Rank);
-	}
-	else 
-	{
-		FactionState = UnitState.GetResistanceFaction();
-		if (FactionState != none)
+		// Individual config trumps the checkbox, but the checkbox trumps global config.
+		if (ClassTemplate.RankNames.Length > 0 && !`GETMCMVAR(REPLACE_CLASS_UNIQUE_RANKS))
+			return ELR_NoInterrupt;
+
+		if (IsUnitOfficer(UnitState))
 		{
-			switch (FactionState.GetMyTemplateName())
+			SetName = `GETMCMVAR(OFFICER_RANK_NAME_SET);
+		}
+		else 
+		{
+			FactionState = UnitState.GetResistanceFaction();
+			if (FactionState != none)
 			{
-			case 'Faction_Reapers':
-				DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(REAPER_RANK_NAME_SET), Rank);
-				break;
-			case 'Faction_Skirmishers':
-				DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(SKIRMISHER_RANK_NAME_SET), Rank);
-				break;
-			case 'Faction_Templars':
-				DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(TEMPLAR_RANK_NAME_SET), Rank);
-				break;
-			default:
-				break;
+				switch (FactionState.GetMyTemplateName())
+				{
+				case 'Faction_Reapers':
+					SetName = `GETMCMVAR(REAPER_RANK_NAME_SET);
+					break;
+				case 'Faction_Skirmishers':
+					SetName = `GETMCMVAR(SKIRMISHER_RANK_NAME_SET);
+					break;
+				case 'Faction_Templars':
+					SetName = `GETMCMVAR(TEMPLAR_RANK_NAME_SET);
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				SetName = `GETMCMVAR(SOLDIER_RANK_NAME_SET);
 			}
 		}
-		else
-		{
-			DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(SOLDIER_RANK_NAME_SET), Rank);
-		}
 	}
+
+	DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(SetName, Rank);
 
 	if (DisplayRankName != "")
 	{
@@ -161,13 +171,14 @@ static function EventListenerReturn OnSoldierShortRankName(Object EventData, Obj
     local XComLWTuple Tuple;
     local int Rank;
     local string DisplayShortRankName;
+	local string SetName;
 
 	UnitState = XComGameState_Unit(EventSource);
 	if (UnitState == none)
 		return ELR_NoInterrupt;
 
 	ClassTemplate = UnitState.GetSoldierClassTemplate();
-	if (ClassTemplate == none || ClassTemplate.ShortNames.Length > 0 && !`GETMCMVAR(REPLACE_CLASS_UNIQUE_RANKS))
+	if (ClassTemplate == none)
 		return ELR_NoInterrupt;
 
 	Tuple = XComLWTuple(EventData);
@@ -179,35 +190,43 @@ static function EventListenerReturn OnSoldierShortRankName(Object EventData, Obj
 		Rank = UnitState.GetRank();
 	}
 
-	if (IsUnitOfficer(UnitState))
+	if (!GetIndividualConfigRankNameSetName(ClassTemplate.DataName, SetName))
 	{
-		DisplayShortRankName = class'X2RankNameTemplate'.static.GetShortNameForRank(`GETMCMVAR(OFFICER_RANK_NAME_SET), Rank);
-	}
-	else
-	{
-		FactionState = UnitState.GetResistanceFaction();
-		if (FactionState != none)
+		if (ClassTemplate.ShortNames.Length > 0 && !`GETMCMVAR(REPLACE_CLASS_UNIQUE_RANKS))	
+			return ELR_NoInterrupt;
+
+		if (IsUnitOfficer(UnitState))
 		{
-			switch (FactionState.GetMyTemplateName())
-			{
-			case 'Faction_Reapers':
-				DisplayShortRankName = class'X2RankNameTemplate'.static.GetShortNameForRank(`GETMCMVAR(REAPER_RANK_NAME_SET), Rank);
-				break;
-			case 'Faction_Skirmishers':
-				DisplayShortRankName = class'X2RankNameTemplate'.static.GetShortNameForRank(`GETMCMVAR(SKIRMISHER_RANK_NAME_SET), Rank);
-				break;
-			case 'Faction_Templars':
-				DisplayShortRankName = class'X2RankNameTemplate'.static.GetShortNameForRank(`GETMCMVAR(TEMPLAR_RANK_NAME_SET), Rank);
-				break;
-			default:
-				break;
-			}
+			SetName = `GETMCMVAR(OFFICER_RANK_NAME_SET);
 		}
 		else
 		{
-			DisplayShortRankName = class'X2RankNameTemplate'.static.GetShortNameForRank(`GETMCMVAR(SOLDIER_RANK_NAME_SET), Rank);
+			FactionState = UnitState.GetResistanceFaction();
+			if (FactionState != none)
+			{
+				switch (FactionState.GetMyTemplateName())
+				{
+				case 'Faction_Reapers':
+					SetName = `GETMCMVAR(REAPER_RANK_NAME_SET);
+					break;
+				case 'Faction_Skirmishers':
+					SetName = `GETMCMVAR(SKIRMISHER_RANK_NAME_SET);
+					break;
+				case 'Faction_Templars':
+					SetName = `GETMCMVAR(TEMPLAR_RANK_NAME_SET);
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				SetName = `GETMCMVAR(SOLDIER_RANK_NAME_SET);				
+			}
 		}
 	}
+
+	DisplayShortRankName = class'X2RankNameTemplate'.static.GetShortNameForRank(SetName, Rank);
 	
 	if (DisplayShortRankName != "")
 	{
@@ -224,13 +243,14 @@ static function EventListenerReturn OnSoldierRankIcon(Object EventData, Object E
     local XComLWTuple Tuple;
     local int Rank;
     local string IconImagePath;
+	local string SetName;
 
 	UnitState = XComGameState_Unit(EventSource);
 	if (UnitState == none)
 		return ELR_NoInterrupt;
 
 	ClassTemplate = UnitState.GetSoldierClassTemplate();
-	if (ClassTemplate == none || ClassTemplate.RankIcons.Length > 0 && !`GETMCMVAR(REPLACE_CLASS_UNIQUE_RANKS))
+	if (ClassTemplate == none)
 		return ELR_NoInterrupt;
 
 	Tuple = XComLWTuple(EventData);
@@ -242,35 +262,43 @@ static function EventListenerReturn OnSoldierRankIcon(Object EventData, Object E
 		Rank = UnitState.GetRank();
 	}
 
-	if (IsUnitOfficer(UnitState))
+	if (!GetIndividualConfigRankIconSetName(ClassTemplate.DataName, SetName))
 	{
-		IconImagePath = class'X2IconSetTemplate'.static.GetIconForRank(`GETMCMVAR(OFFICER_RANK_ICON_SET), Rank);
-	}
-	else
-	{
-		FactionState = UnitState.GetResistanceFaction();
-		if (FactionState != none)
+		if (ClassTemplate.RankIcons.Length > 0 && !`GETMCMVAR(REPLACE_CLASS_UNIQUE_RANKS))
+			return ELR_NoInterrupt;
+
+		if (IsUnitOfficer(UnitState))
 		{
-			switch (FactionState.GetMyTemplateName())
-			{
-			case 'Faction_Reapers':
-				IconImagePath = class'X2IconSetTemplate'.static.GetIconForRank(`GETMCMVAR(REAPER_RANK_ICON_SET), Rank);
-				break;
-			case 'Faction_Skirmishers':
-				IconImagePath = class'X2IconSetTemplate'.static.GetIconForRank(`GETMCMVAR(SKIRMISHER_RANK_ICON_SET), Rank);
-				break;
-			case 'Faction_Templars':
-				IconImagePath = class'X2IconSetTemplate'.static.GetIconForRank(`GETMCMVAR(TEMPLAR_RANK_ICON_SET), Rank);
-				break;
-			default:
-				break;
-			}
+			SetName = `GETMCMVAR(OFFICER_RANK_ICON_SET);
 		}
 		else
 		{
-			IconImagePath = class'X2IconSetTemplate'.static.GetIconForRank(`GETMCMVAR(SOLDIER_RANK_ICON_SET), Rank);
+			FactionState = UnitState.GetResistanceFaction();
+			if (FactionState != none)
+			{
+				switch (FactionState.GetMyTemplateName())
+				{
+				case 'Faction_Reapers':
+					SetName = `GETMCMVAR(REAPER_RANK_ICON_SET);
+					break;
+				case 'Faction_Skirmishers':
+					SetName = `GETMCMVAR(SKIRMISHER_RANK_ICON_SET);
+					break;
+				case 'Faction_Templars':
+					SetName = `GETMCMVAR(TEMPLAR_RANK_ICON_SET);
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				SetName = `GETMCMVAR(SOLDIER_RANK_ICON_SET);
+			}
 		}
 	}
+
+	IconImagePath = class'X2IconSetTemplate'.static.GetIconForRank(SetName, Rank);
 	
 	if (IconImagePath != "")
 	{
@@ -286,11 +314,6 @@ static final function bool IsUnitOfficer(const out XComGameState_Unit UnitState)
 	local int Index;
 	local UnitValue	UV;
 	local name ValueName;
-
-	if (default.SkipOfficerSoldierClasses.Find(UnitState.GetSoldierClassTemplateName()) != INDEX_NONE)
-	{
-		return false;
-	}
 
 	if (default.OfficerCharacterTemplates.Find(UnitState.GetMyTemplateName()) != INDEX_NONE)
 	{
@@ -357,4 +380,54 @@ static final function int FindCommandingOfficerSquadSlotIndex()
 		}
 	}
 	return iCommandingOfficerIndex;
+}
+
+// Returns true if the class has individual config and the logic should use whatever was put into SetName rather than global set names.
+static final function bool GetIndividualConfigRankNameSetName(const name SoldierClassName, out string SetName)
+{
+	local array<IndividualClassConfigStruct> IndividualConfig;
+	local int Index;
+
+	IndividualConfig = class'OFF_MCM_Screen'.static.GET_INDIVIDUAL_CLASS_CONFIG();
+	Index = IndividualConfig.Find('TemplateName', SoldierClassName);
+	if (Index != INDEX_NONE)
+	{
+		switch (IndividualConfig[Index].RankNameSet)
+		{
+		case "":
+		case "Default":
+			return false;
+		case "NoReplacement": // Return true without actually setting a SetName, so the global setname logic will not be used and soldier's ranks will not be replaced.
+			return true;
+		default:
+			SetName = IndividualConfig[Index].RankNameSet;
+			return true;
+		}		
+	}
+	return false;
+}
+
+
+static final function bool GetIndividualConfigRankIconSetName(const name SoldierClassName, out string SetName)
+{
+	local array<IndividualClassConfigStruct> IndividualConfig;
+	local int Index;
+
+	IndividualConfig = class'OFF_MCM_Screen'.static.GET_INDIVIDUAL_CLASS_CONFIG();
+	Index = IndividualConfig.Find('TemplateName', SoldierClassName);
+	if (Index != INDEX_NONE)
+	{
+		switch (IndividualConfig[Index].RankNameSet)
+		{
+		case "":
+		case "Default":
+			return false;
+		case "NoReplacement": // Return true without actually setting a SetName, so the global setname logic will not be used and soldier's ranks will not be replaced.
+			return true;
+		default:
+			SetName = IndividualConfig[Index].RankIconSet;
+			return true;
+		}		
+	}
+	return false;
 }

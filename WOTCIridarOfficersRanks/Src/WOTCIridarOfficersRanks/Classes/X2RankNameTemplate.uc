@@ -10,6 +10,9 @@ static final function string GetNameForRank(const coerce string TemplateName, co
 	local X2RankNameTemplate		Template;
 	local X2SoldierClassTemplate	ClassTemplate;
 
+	if (TemplateName == "")
+		return "";
+
 	Template = class'X2RankNameTemplateManager'.static.GetRankNameTemplateManager().FindRankNameTemplate(name(TemplateName));
 	if (Template != none)
 	{
