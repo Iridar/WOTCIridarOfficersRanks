@@ -1,5 +1,7 @@
 class X2IconSetTemplateManager extends X2DataTemplateManager;
 
+var config(RankChanges) array<name> SkipSoldierClassesFromDetection;
+
 static function X2IconSetTemplateManager GetIconSetTemplateManager()
 {
 	return X2IconSetTemplateManager(class'Engine'.static.GetTemplateManager(class'X2IconSetTemplateManager'));
@@ -21,6 +23,10 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 	local X2DataTemplate			DataTemplate;
 	local X2IconSetTemplate			IconSetTemplate;
 
+	local X2SoldierClassTemplateManager	ClassMgr;
+	local X2SoldierClassTemplate		ClassTemplate;
+	local array<X2SoldierClassTemplate>	ClassTemplates;
+
 	Mgr = GetIconSetTemplateManager();
 
 	foreach Mgr.IterateTemplates(DataTemplate)
@@ -36,11 +42,45 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 			OutArray.AddItem(string(IconSetTemplate.DataName));
 		}
 	}
+
+	ClassMgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
+	foreach ClassTemplates(ClassTemplate)
+	{
+		`LOG("Looking at:" @ ClassTemplate.DataName @ ClassTemplate.DisplayName,, 'IRITEST');
+		`LOG("0:" @ default.SkipSoldierClassesFromDetection[0],, 'IRITEST');
+		`LOG("1:" @ default.SkipSoldierClassesFromDetection[1],, 'IRITEST');
+
+		if (default.SkipSoldierClassesFromDetection.Find(ClassTemplate.DataName) != INDEX_NONE)
+				continue;
+
+		`LOG("It's not in the exclusion array",, 'IRITEST');
+
+		if (ClassTemplate.RankIcons.Length > 2)
+		{
+			if (ClassTemplate.DisplayName != "")
+			{
+				if (OutArray.Find(ClassTemplate.DisplayName) == INDEX_NONE)
+				{
+					`LOG("Adding:" @ ClassTemplate.DisplayName @ "to array",, 'IRITEST');
+					OutArray.AddItem(ClassTemplate.DisplayName);
+				}
+			}
+			else if (OutArray.Find(string(ClassTemplate.DataName)) == INDEX_NONE)
+			{
+				`LOG("Adding:" @ ClassTemplate.DataName @ "to array",, 'IRITEST');
+				OutArray.AddItem(string(ClassTemplate.DataName));
+			}
+		}
+	}
 }
 
 static final function string GetIconSetTemplateLocName(const string TemplateName)
 {
 	local X2IconSetTemplate IconSetTemplate;
+
+	local X2SoldierClassTemplateManager	ClassMgr;
+	local X2SoldierClassTemplate		ClassTemplate;
 
 	IconSetTemplate = GetIconSetTemplateManager().FindIconSetTemplate(name(TemplateName));
 	if (IconSetTemplate != none)
@@ -51,6 +91,18 @@ static final function string GetIconSetTemplateLocName(const string TemplateName
 		}
 		return string(IconSetTemplate.DataName);
 	}
+
+	ClassMgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	ClassTemplate = ClassMgr.FindSoldierClassTemplate(name(TemplateName));
+	if (ClassTemplate != none)
+	{
+		if (ClassTemplate.DisplayName != "")
+		{
+			return ClassTemplate.DisplayName;
+		}
+		return string(ClassTemplate.DataName);
+	}
+
 	return class'OFF_MCM_Screen'.default.strNoReplacement;
 }
 
@@ -60,6 +112,13 @@ static final function string GetIconSetTemplateNameByLocName(const string FindLo
 	local X2DataTemplate			DataTemplate;
 	local X2IconSetTemplate			IconSetTemplate;
 
+	local X2SoldierClassTemplateManager	ClassMgr;
+	local X2SoldierClassTemplate		ClassTemplate;
+	local array<X2SoldierClassTemplate>	ClassTemplates;
+
+	if (FindLocName == class'OFF_MCM_Screen'.default.strNoReplacement)
+		return "";
+
 	Mgr = GetIconSetTemplateManager();
 
 	foreach Mgr.IterateTemplates(DataTemplate)
@@ -68,6 +127,17 @@ static final function string GetIconSetTemplateNameByLocName(const string FindLo
 		if (IconSetTemplate.LocName == FindLocName || IconSetTemplate.DataName == name(FindLocName))
 			return string(IconSetTemplate.DataName);
 	}
+
+	ClassMgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
+	foreach ClassTemplates(ClassTemplate)
+	{
+		if (ClassTemplate.DisplayName == FindLocName || ClassTemplate.DataName == name(FindLocName))
+		{
+			return string(ClassTemplate.DataName);
+		}
+	}
+
 	return "";
 }
 

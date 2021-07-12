@@ -1,5 +1,7 @@
 class X2RankNameTemplateManager extends X2DataTemplateManager;
 
+var config(RankChanges) array<name> SkipSoldierClassesFromDetection;
+
 static function X2RankNameTemplateManager GetRankNameTemplateManager()
 {
 	return X2RankNameTemplateManager(class'Engine'.static.GetTemplateManager(class'X2RankNameTemplateManager'));
@@ -21,6 +23,10 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 	local X2DataTemplate			DataTemplate;
 	local X2RankNameTemplate		RankNameTemplate;
 
+	local X2SoldierClassTemplateManager	ClassMgr;
+	local X2SoldierClassTemplate		ClassTemplate;
+	local array<X2SoldierClassTemplate>	ClassTemplates;
+
 	Mgr = GetRankNameTemplateManager();
 
 	foreach Mgr.IterateTemplates(DataTemplate)
@@ -36,10 +42,36 @@ static final function GetLocalizedTemplateList(out array<string> OutArray)
 			OutArray.AddItem(string(RankNameTemplate.DataName));
 		}
 	}
+
+	ClassMgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
+	foreach ClassTemplates(ClassTemplate)
+	{
+		if (default.SkipSoldierClassesFromDetection.Find(ClassTemplate.DataName) != INDEX_NONE)
+			continue;
+
+		if (ClassTemplate.RankNames.Length > 2) // >2 to catch DLC Shen and Central
+		{
+			if (ClassTemplate.DisplayName != "")
+			{
+				if (OutArray.Find(ClassTemplate.DisplayName) == INDEX_NONE)
+				{
+					OutArray.AddItem(ClassTemplate.DisplayName);
+				}
+			}
+			else if (OutArray.Find(string(ClassTemplate.DataName)) == INDEX_NONE)
+			{
+				OutArray.AddItem(string(ClassTemplate.DataName));
+			}
+		}
+	}
 }
 static final function string GetRankNameTemplateLocName(const string TemplateName)
 {
 	local X2RankNameTemplate RankNameTemplate;
+
+	local X2SoldierClassTemplateManager	ClassMgr;
+	local X2SoldierClassTemplate		ClassTemplate;
 
 	RankNameTemplate = GetRankNameTemplateManager().FindRankNameTemplate(name(TemplateName));
 	if (RankNameTemplate != none)
@@ -50,6 +82,18 @@ static final function string GetRankNameTemplateLocName(const string TemplateNam
 		}
 		return string(RankNameTemplate.DataName);
 	}
+
+	ClassMgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	ClassTemplate = ClassMgr.FindSoldierClassTemplate(name(TemplateName));
+	if (ClassTemplate != none)
+	{
+		if (ClassTemplate.DisplayName != "")
+		{
+			return ClassTemplate.DisplayName;
+		}
+		return string(ClassTemplate.DataName);
+	}
+
 	return class'OFF_MCM_Screen'.default.strNoReplacement;
 }
 
@@ -57,7 +101,14 @@ static final function string GetRankNameTemplateNameByLocName(const string FindL
 {
 	local X2RankNameTemplateManager	Mgr;
 	local X2DataTemplate			DataTemplate;
-	local X2RankNameTemplate			RankNameTemplate;
+	local X2RankNameTemplate		RankNameTemplate;
+
+	local X2SoldierClassTemplateManager	ClassMgr;
+	local X2SoldierClassTemplate		ClassTemplate;
+	local array<X2SoldierClassTemplate>	ClassTemplates;
+
+	if (FindLocName == class'OFF_MCM_Screen'.default.strNoReplacement)
+		return "";
 
 	Mgr = GetRankNameTemplateManager();
 
@@ -67,6 +118,17 @@ static final function string GetRankNameTemplateNameByLocName(const string FindL
 		if (RankNameTemplate.LocName == FindLocName || RankNameTemplate.DataName == name(FindLocName))
 			return string(RankNameTemplate.DataName);
 	}
+
+	ClassMgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	ClassTemplates = ClassMgr.GetAllSoldierClassTemplates(true);
+	foreach ClassTemplates(ClassTemplate)
+	{
+		if (ClassTemplate.DisplayName == FindLocName || ClassTemplate.DataName == name(FindLocName))
+		{
+			return string(ClassTemplate.DataName);
+		}
+	}
+
 	return "";
 }
 

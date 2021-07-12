@@ -5,9 +5,10 @@ var localized string LocName;
 var localized array<string> RankNames;
 var localized array<string> ShortNames;
 
-static final function string GetNameForRank(const string TemplateName, const int Rank)
+static final function string GetNameForRank(const coerce string TemplateName, const int Rank)
 {
-	local X2RankNameTemplate Template;
+	local X2RankNameTemplate		Template;
+	local X2SoldierClassTemplate	ClassTemplate;
 
 	Template = class'X2RankNameTemplateManager'.static.GetRankNameTemplateManager().FindRankNameTemplate(name(TemplateName));
 	if (Template != none)
@@ -18,12 +19,24 @@ static final function string GetNameForRank(const string TemplateName, const int
 		}
 		return Template.RankNames[Template.RankNames.Length - 1];
 	}
+
+	ClassTemplate = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager().FindSoldierClassTemplate(name(TemplateName));
+	if (ClassTemplate != none)
+	{
+		if (ClassTemplate.RankNames.Length > Rank)
+		{
+			return ClassTemplate.RankNames[Rank];
+		}
+		return ClassTemplate.RankNames[ClassTemplate.RankNames.Length - 1];
+	}
+
 	return "";
 }
 
 static final function string GetShortNameForRank(const string TemplateName, const int Rank)
 {
-	local X2RankNameTemplate Template;
+	local X2RankNameTemplate		Template;
+	local X2SoldierClassTemplate	ClassTemplate;
 
 	Template = class'X2RankNameTemplateManager'.static.GetRankNameTemplateManager().FindRankNameTemplate(name(TemplateName));
 	if (Template != none)
@@ -34,5 +47,16 @@ static final function string GetShortNameForRank(const string TemplateName, cons
 		}
 		return Template.ShortNames[Template.ShortNames.Length - 1];
 	}
+
+	ClassTemplate = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager().FindSoldierClassTemplate(name(TemplateName));
+	if (ClassTemplate != none)
+	{
+		if (ClassTemplate.ShortNames.Length > Rank)
+		{
+			return ClassTemplate.ShortNames[Rank];
+		}
+		return ClassTemplate.ShortNames[ClassTemplate.ShortNames.Length - 1];
+	}
+
 	return "";
 }

@@ -6,7 +6,9 @@ More info here: https://www.patreon.com/Iridar
 
 TODO:
 Detect officers by ability templates, needed for RPGO
-Include MCM config for vanilla classes' rank names?
+How do we handle sparks?- as individual class.
+Per-class config for rank replacements? ("Use global settings by default")
+Return drop down lists, maybe?
 
 [WOTC] Iridar's Cosmetic Rank Replacer
 

@@ -14,60 +14,58 @@ var config array<ClassIsOfficerStruct> OFFICER_CLASSES;
 
 `include(WOTCIridarOfficersRanks\Src\ModConfigMenuAPI\MCM_API_Includes.uci)
 
-//`MCM_API_AutoSpinnerVars(VARNAME) var config string `VARNAME; var localized string `{VARNAME}_Label;var localized string `{VARNAME}_Tip; var MCM_API_Spinner `{VARNAME}_MCMUI
+`MCM_API_AutoDropdownVars(OFFICER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(SOLDIER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(REAPER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(SKIRMISHER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(TEMPLAR_RANK_NAME_SET);
 
-`MCM_API_AutoSpinnerVars(OFFICER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(SOLDIER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(REAPER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(SKIRMISHER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(TEMPLAR_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(OFFICER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(SOLDIER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(REAPER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(SKIRMISHER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(TEMPLAR_RANK_ICON_SET);
 
-`MCM_API_AutoSpinnerVars(OFFICER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(SOLDIER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(REAPER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(SKIRMISHER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(TEMPLAR_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(loc_OFFICER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(loc_SOLDIER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(loc_REAPER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(loc_SKIRMISHER_RANK_NAME_SET);
+`MCM_API_AutoDropdownVars(loc_TEMPLAR_RANK_NAME_SET);
 
-`MCM_API_AutoSpinnerVars(loc_OFFICER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(loc_SOLDIER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(loc_REAPER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(loc_SKIRMISHER_RANK_NAME_SET);
-`MCM_API_AutoSpinnerVars(loc_TEMPLAR_RANK_NAME_SET);
-
-`MCM_API_AutoSpinnerVars(loc_OFFICER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(loc_SOLDIER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(loc_REAPER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(loc_SKIRMISHER_RANK_ICON_SET);
-`MCM_API_AutoSpinnerVars(loc_TEMPLAR_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(loc_OFFICER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(loc_SOLDIER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(loc_REAPER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(loc_SKIRMISHER_RANK_ICON_SET);
+`MCM_API_AutoDropdownVars(loc_TEMPLAR_RANK_ICON_SET);
 
 `MCM_API_AutoCheckBoxVars(REPLACE_CLASS_UNIQUE_RANKS);
 `MCM_API_AutoCheckBoxVars(MARK_OFFICER_IN_SQUAD_SELECT);
 
 `include(WOTCIridarOfficersRanks\Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci)
 
-`MCM_API_AutoSpinnerFns(OFFICER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(SOLDIER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(REAPER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(SKIRMISHER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(TEMPLAR_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(OFFICER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(SOLDIER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(REAPER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(SKIRMISHER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(TEMPLAR_RANK_NAME_SET, 1);
 
-`MCM_API_AutoSpinnerFns(OFFICER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(SOLDIER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(REAPER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(SKIRMISHER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(TEMPLAR_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(OFFICER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(SOLDIER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(REAPER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(SKIRMISHER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(TEMPLAR_RANK_ICON_SET, 1);
 
-`MCM_API_AutoSpinnerFns(loc_OFFICER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_SOLDIER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_REAPER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_SKIRMISHER_RANK_NAME_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_TEMPLAR_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(loc_OFFICER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(loc_SOLDIER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(loc_REAPER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(loc_SKIRMISHER_RANK_NAME_SET, 1);
+`MCM_API_AutoDropdownFns(loc_TEMPLAR_RANK_NAME_SET, 1);
 
-`MCM_API_AutoSpinnerFns(loc_OFFICER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_SOLDIER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_REAPER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_SKIRMISHER_RANK_ICON_SET, 1);
-`MCM_API_AutoSpinnerFns(loc_TEMPLAR_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(loc_OFFICER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(loc_SOLDIER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(loc_REAPER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(loc_SKIRMISHER_RANK_ICON_SET, 1);
+`MCM_API_AutoDropdownFns(loc_TEMPLAR_RANK_ICON_SET, 1);
 
 `MCM_API_AutoCheckBoxFns(REPLACE_CLASS_UNIQUE_RANKS, 1);
 `MCM_API_AutoCheckBoxFns(MARK_OFFICER_IN_SQUAD_SELECT, 1);
@@ -87,46 +85,49 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	local array<string> StringArray;
 
 	local int i;
-	local X2SoldierClassTemplateManager Mgr;
-	local X2SoldierClassTemplate ClassTemplate;
+	local X2SoldierClassTemplateManager	Mgr;
+	local X2SoldierClassTemplate		ClassTemplate;
     
     LoadSavedSettings();
-    
+	   
+	// # MCM Screen Setup
     Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL);
     Page.SetPageTitle(str_MOD_LABEL);
     Page.SetSaveHandler(SaveButtonClicked);
     //Page.EnableResetButton(ResetButtonClicked);
 
+	// # General Settings
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_0', str_GROUP_GENERAL_SETTINGS);
 	`MCM_API_AutoAddCheckBox(Group, REPLACE_CLASS_UNIQUE_RANKS);	
 	`MCM_API_AutoAddCheckBox(Group, MARK_OFFICER_IN_SQUAD_SELECT);	
 
+	// # Rank Name Sets
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_1', str_GROUP_RANK_NAMES);
 	StringArray.AddItem(strNoReplacement);
 	class'X2RankNameTemplateManager'.static.GetLocalizedTemplateList(StringArray);
 
-	`MCM_API_AutoAddSpinner(Group, loc_OFFICER_RANK_NAME_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_SOLDIER_RANK_NAME_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_REAPER_RANK_NAME_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_SKIRMISHER_RANK_NAME_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_TEMPLAR_RANK_NAME_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_OFFICER_RANK_NAME_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_SOLDIER_RANK_NAME_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_REAPER_RANK_NAME_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_SKIRMISHER_RANK_NAME_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_TEMPLAR_RANK_NAME_SET, StringArray);
 
+	// # Rank Icon Sets
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_2', str_GROUP_RANK_ICONS);
 	StringArray.Length = 0;
 	StringArray.AddItem(strNoReplacement);
 	class'X2IconSetTemplateManager'.static.GetLocalizedTemplateList(StringArray);
 
-	`MCM_API_AutoAddSpinner(Group, loc_OFFICER_RANK_ICON_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_SOLDIER_RANK_ICON_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_REAPER_RANK_ICON_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_SKIRMISHER_RANK_ICON_SET, StringArray);
-	`MCM_API_AutoAddSpinner(Group, loc_TEMPLAR_RANK_ICON_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_OFFICER_RANK_ICON_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_SOLDIER_RANK_ICON_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_REAPER_RANK_ICON_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_SKIRMISHER_RANK_ICON_SET, StringArray);
+	`MCM_API_AutoAddDropdown(Group, loc_TEMPLAR_RANK_ICON_SET, StringArray);
 
-	// ## Officer classes
+	// # Officer classes
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_3', str_GROUP_OFFICER_CLASSES);
-
-	Mgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 	// Validate list of templates
+	Mgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 	for (i = OFFICER_CLASSES.Length - 1; i >= 0; i--)
 	{
 		ClassTemplate = Mgr.FindSoldierClassTemplate(OFFICER_CLASSES[i].TemplateName);
@@ -177,6 +178,7 @@ simulated function LoadSavedSettings()
 	Mgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 	Mgr.GetTemplateNames(TemplateNames);
 
+	// Append the array with soldier class templates that are not there already.
 	foreach TemplateNames(TemplateName)
 	{
 		if (OFFICER_CLASSES.Find('TemplateName', TemplateName) == INDEX_NONE)
@@ -221,6 +223,8 @@ simulated function SaveButtonClicked(MCM_API_SettingsPage Page)
 	REAPER_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateNameByLocName(loc_REAPER_RANK_NAME_SET);
 	SKIRMISHER_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateNameByLocName(loc_SKIRMISHER_RANK_NAME_SET);
 	TEMPLAR_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateNameByLocName(loc_TEMPLAR_RANK_NAME_SET);
+
+	`LOG("Saving SOLDIER_RANK_NAME_SET as:" @ SOLDIER_RANK_NAME_SET,, 'IRITEST');
 
 	OFFICER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateNameByLocName(loc_OFFICER_RANK_ICON_SET);
 	SOLDIER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateNameByLocName(loc_SOLDIER_RANK_ICON_SET);

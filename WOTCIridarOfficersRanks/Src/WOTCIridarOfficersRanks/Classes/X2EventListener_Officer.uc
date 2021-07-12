@@ -98,6 +98,7 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
     local XComLWTuple Tuple;
     local int Rank;
     local string DisplayRankName;
+	local string NameSet;
 
 	UnitState = XComGameState_Unit(EventSource);
 	if (UnitState == none)
@@ -118,6 +119,8 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
 
 	if (IsUnitOfficer(UnitState))
 	{
+		NameSet = `GETMCMVAR(OFFICER_RANK_NAME_SET);
+		`LOG(GetFuncName() @ "unit is officer" @ `GETMCMVAR(OFFICER_RANK_NAME_SET) @ NameSet,, 'IRITEST');
 		DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(OFFICER_RANK_NAME_SET), Rank);
 	}
 	else 
@@ -142,7 +145,9 @@ static function EventListenerReturn OnSoldierRankName(Object EventData, Object E
 		}
 		else
 		{
-			DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(`GETMCMVAR(SOLDIER_RANK_NAME_SET), Rank);
+			NameSet = `GETMCMVAR(SOLDIER_RANK_NAME_SET);
+			`LOG(GetFuncName() @ "unit is soldier" @ `GETMCMVAR(SOLDIER_RANK_NAME_SET) @ NameSet,, 'IRITEST');
+			DisplayRankName = class'X2RankNameTemplate'.static.GetNameForRank(NameSet, Rank);
 		}
 	}
 
@@ -281,6 +286,7 @@ static function EventListenerReturn OnSoldierRankIcon(Object EventData, Object E
 
 static final function bool IsUnitOfficer(const out XComGameState_Unit UnitState)
 {
+	local class<XComGameState_BaseObject> ComponentClass;
 	local array<ClassIsOfficerStruct> OfficerClasses;
 	local int Index;
 	local UnitValue	UV;
@@ -302,7 +308,8 @@ static final function bool IsUnitOfficer(const out XComGameState_Unit UnitState)
 	}
 
 	// This catches LWOTC and Long War Leader Pack officers.
-	if (UnitState.FindComponentObject(class<XComGameState_BaseObject>(class'XComEngine'.static.GetClassByName('XComGameState_Unit_LWOfficer'))) != none)
+	ComponentClass = class<XComGameState_BaseObject>(class'XComEngine'.static.GetClassByName('XComGameState_Unit_LWOfficer'));
+	if (ComponentClass != none && UnitState.FindComponentObject(ComponentClass) != none)
 	{
 		return true;
 	}
@@ -329,7 +336,6 @@ static final function bool IsUnitOfficer(const out XComGameState_Unit UnitState)
 			return true;
 		}
 	}
-
 	return false;
 }
 
