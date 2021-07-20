@@ -7,6 +7,7 @@
     <SteamPublishID>0</SteamPublishID>
     <AssemblyName>WOTCIridarOfficersRanks</AssemblyName>
     <RootNamespace>WOTCIridarOfficersRanks</RootNamespace>
+    <ProjectGuid>{8a469dc9-e1ef-4444-a1e6-6317b31038bd}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Config\" />
@@ -121,7 +122,7 @@
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>
-    <PropertyGroup>
+  <PropertyGroup>
     <SolutionRoot>$(MSBuildProjectDirectory)\..\</SolutionRoot>
     <ScriptsDir>$(SolutionRoot).scripts\</ScriptsDir>
     <BuildCommonRoot>$(ScriptsDir)X2ModBuildCommon\</BuildCommonRoot>

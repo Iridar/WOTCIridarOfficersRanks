@@ -153,7 +153,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
 	{
 		ClassTemplate = Mgr.FindSoldierClassTemplate(INDIVIDUAL_CLASS_CONFIG[i].TemplateName);
-		SetLocName = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankIconSet);
+		SetLocName = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankIconSet);
 		Group.AddDropdown(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ ClassTemplate.DataName $ ")", strClassIndividualConfigTooltip, RankIconOptions, SetLocName, IndividualSoldierClassHandler_RankIcon);
 	}
 
