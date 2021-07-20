@@ -8,14 +8,24 @@ var config array<name> SkipSoldierClasses;
 
 var localized string strCommandingOfficer;
 
+var class<XComGameState_BaseObject> LWOfficerComponentClass;
+
 `include(WOTCIridarOfficersRanks/Src/ModConfigMenuAPI/MCM_API_CfgHelpers.uci)
 
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
+	local X2EventListener_Officer CDO;
 
 	Templates.AddItem(SoldierRankListener());
 	Templates.AddItem(SquadSelectListener());
+
+	CDO = X2EventListener_Officer(class'XComEngine'.static.GetClassDefaultObject(class'WOTCIridarOfficersRanks.X2EventListener_Officer'));
+	CDO.LWOfficerComponentClass = class<XComGameState_BaseObject>(class'XComEngine'.static.GetClassByName('XComGameState_Unit_LWOfficer'));
+	if (CDO.LWOfficerComponentClass != none)
+	{
+		`LOG("LWOTC officer component class detected.",, 'WOTCIridarOfficersRanks');
+	}
 
 	return Templates;
 }
@@ -309,7 +319,7 @@ static function EventListenerReturn OnSoldierRankIcon(Object EventData, Object E
 
 static final function bool IsUnitOfficer(const out XComGameState_Unit UnitState)
 {
-	local class<XComGameState_BaseObject> ComponentClass;
+	//local class<XComGameState_BaseObject> ComponentClass;
 	local array<ClassIsOfficerStruct> OfficerClasses;
 	local int Index;
 	local UnitValue	UV;
@@ -326,8 +336,10 @@ static final function bool IsUnitOfficer(const out XComGameState_Unit UnitState)
 	}
 
 	// This catches LWOTC and Long War Leader Pack officers.
-	ComponentClass = class<XComGameState_BaseObject>(class'XComEngine'.static.GetClassByName('XComGameState_Unit_LWOfficer'));
-	if (ComponentClass != none && UnitState.FindComponentObject(ComponentClass) != none)
+	//ComponentClass = class<XComGameState_BaseObject>(class'XComEngine'.static.GetClassByName('XComGameState_Unit_LWOfficer'));
+	//ComponentClass = default.LWOfficerComponentClass;
+	//ComponentClass = FindObject("LW_OfficerPack_Integrated.XComGameState_Unit_LWOfficer", class'Class');
+	if (default.LWOfficerComponentClass != none && UnitState.FindComponentObject(default.LWOfficerComponentClass) != none)
 	{
 		return true;
 	}
