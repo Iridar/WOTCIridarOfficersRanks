@@ -77,8 +77,11 @@ var config array<IndividualClassConfigStruct> INDIVIDUAL_CLASS_CONFIG;
 
 event OnInit(UIScreen Screen)
 {
+	`LOG(self.Class.Name @ GetFuncName(),, 'IRI_CRR');
+
 	if (MCM_API(Screen) != none)
 	{
+		`LOG("Registering ClientModCallback",, 'IRI_CRR');
 		`MCM_API_Register(Screen, ClientModCallback);
 	}
 }
@@ -95,6 +98,8 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	local string						SetLocName;
 	local int i;
 
+	`LOG(self.Class.Name @ GetFuncName(),, 'IRI_CRR');
+
 	// # Internal Init
 	Mgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 
@@ -103,8 +108,12 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 
 	RankIconOptions.AddItem(strNoReplacement);
 	class'X2IconSetTemplateManager'.static.GetLocalizedTemplateList(RankIconOptions);
+
+	`LOG("Finished internal init.",, 'IRI_CRR');
     
     LoadSavedSettings();
+
+	`LOG("Creating MCM page.",, 'IRI_CRR');
 	   
 	// # MCM Screen Setup
     Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL);
@@ -112,10 +121,14 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
     Page.SetSaveHandler(SaveButtonClicked);
     //Page.EnableResetButton(ResetButtonClicked);
 
+	`LOG("Creating general settings group" @ 'IRI_Officers_MCM_Group_0',, 'IRI_CRR');
+
 	// # General Settings
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_0', str_GROUP_GENERAL_SETTINGS);
 	`MCM_API_AutoAddCheckBox(Group, REPLACE_CLASS_UNIQUE_RANKS);	
 	`MCM_API_AutoAddCheckBox(Group, MARK_OFFICER_IN_SQUAD_SELECT);	
+
+	`LOG("Creating rank name sets group" @ 'IRI_Officers_MCM_Group_1',, 'IRI_CRR');
 
 	// # Rank Name Sets - Global Config
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_1', str_GROUP_RANK_NAMES);	
@@ -126,6 +139,8 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	`MCM_API_AutoAddDropdown(Group, loc_SKIRMISHER_RANK_NAME_SET, RankNameOptions);
 	`MCM_API_AutoAddDropdown(Group, loc_TEMPLAR_RANK_NAME_SET, RankNameOptions);
 
+	`LOG("Creating rank icon sets group" @ 'IRI_Officers_MCM_Group_2',, 'IRI_CRR');
+
 	// # Rank Icon Sets
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_2', str_GROUP_RANK_ICONS);	
 
@@ -135,16 +150,22 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	`MCM_API_AutoAddDropdown(Group, loc_SKIRMISHER_RANK_ICON_SET, RankIconOptions);
 	`MCM_API_AutoAddDropdown(Group, loc_TEMPLAR_RANK_ICON_SET, RankIconOptions);
 
+	`LOG("Creating rank name set - individual config group" @ 'IRI_Officers_MCM_Group_1A',, 'IRI_CRR');
+
 	// # Rank Name Sets - Individual config
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_1A', str_GROUP_RANK_NAMES $ str_INDIVIDUAL_CONFIG);
 
 	RankNameOptions.InsertItem(0, strDefault);
 	for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
 	{
+		`LOG("Adding dropdown for:" @ INDIVIDUAL_CLASS_CONFIG[i].TemplateName,, 'IRI_CRR');
+
 		ClassTemplate = Mgr.FindSoldierClassTemplate(INDIVIDUAL_CLASS_CONFIG[i].TemplateName);
 		SetLocName = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankNameSet);
 		Group.AddDropdown(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ ClassTemplate.DataName $ ")", strClassIndividualConfigTooltip, RankNameOptions, SetLocName, IndividualSoldierClassHandler_RankName);
 	}
+
+	`LOG("Creating rank icon set - individual config group" @ 'IRI_Officers_MCM_Group_2A',, 'IRI_CRR');
 
 	// # Rank Icon Sets - Individual config
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_2A', str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG);
@@ -152,19 +173,28 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	RankIconOptions.InsertItem(0, strDefault);
 	for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
 	{
+		`LOG("Adding dropdown for:" @ INDIVIDUAL_CLASS_CONFIG[i].TemplateName,, 'IRI_CRR');
+
 		ClassTemplate = Mgr.FindSoldierClassTemplate(INDIVIDUAL_CLASS_CONFIG[i].TemplateName);
 		SetLocName = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankIconSet);
 		Group.AddDropdown(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ ClassTemplate.DataName $ ")", strClassIndividualConfigTooltip, RankIconOptions, SetLocName, IndividualSoldierClassHandler_RankIcon);
 	}
 
+
+	`LOG("Creating officer class group" @ 'IRI_Officers_MCM_Group_3',, 'IRI_CRR');
+
 	// # Officer classes
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_3', str_GROUP_OFFICER_CLASSES);
 
 	for (i = 0; i < OFFICER_CLASSES.Length; i++)
-	{
+	{	
+		`LOG("Adding checkbox for:" @ OFFICER_CLASSES[i].TemplateName,, 'IRI_CRR');
+
 		ClassTemplate = Mgr.FindSoldierClassTemplate(OFFICER_CLASSES[i].TemplateName);
 		Group.AddCheckbox(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ OFFICER_CLASSES[i].TemplateName $ ")", strOfficerClassTooltip, OFFICER_CLASSES[i].bOfficer, OfficerClassCheckboxHandler);
 	}
+
+	`LOG("All finished, showing settings.",, 'IRI_CRR');
 
     Page.ShowSettings();
 }
@@ -178,11 +208,15 @@ simulated function LoadSavedSettings()
 	local X2SoldierClassTemplate		ClassTemplate;
 	local int i;
 
+	`LOG(self.Class.Name @ GetFuncName(),, 'IRI_CRR');
+
     OFFICER_RANK_NAME_SET = `GETMCMVAR(OFFICER_RANK_NAME_SET);
 	SOLDIER_RANK_NAME_SET = `GETMCMVAR(SOLDIER_RANK_NAME_SET);
 	REAPER_RANK_NAME_SET = `GETMCMVAR(REAPER_RANK_NAME_SET);
 	SKIRMISHER_RANK_NAME_SET = `GETMCMVAR(SKIRMISHER_RANK_NAME_SET);
 	TEMPLAR_RANK_NAME_SET = `GETMCMVAR(TEMPLAR_RANK_NAME_SET);
+
+	`LOG("Got rank name sets.",, 'IRI_CRR');
 
 	OFFICER_RANK_ICON_SET = `GETMCMVAR(OFFICER_RANK_ICON_SET);
 	SOLDIER_RANK_ICON_SET = `GETMCMVAR(SOLDIER_RANK_ICON_SET);
@@ -190,13 +224,20 @@ simulated function LoadSavedSettings()
 	SKIRMISHER_RANK_ICON_SET = `GETMCMVAR(SKIRMISHER_RANK_ICON_SET);
 	TEMPLAR_RANK_ICON_SET = `GETMCMVAR(TEMPLAR_RANK_ICON_SET);
 
+	`LOG("Got rank icon sets.",, 'IRI_CRR');
+
 	REPLACE_CLASS_UNIQUE_RANKS = `GETMCMVAR(REPLACE_CLASS_UNIQUE_RANKS);
 	MARK_OFFICER_IN_SQUAD_SELECT = `GETMCMVAR(MARK_OFFICER_IN_SQUAD_SELECT);
+
+	`LOG("Got checkbox settings.",, 'IRI_CRR');
 
 	Mgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 
 	// Individual config
 	INDIVIDUAL_CLASS_CONFIG = `MCM_CH_GetValue(class'OFF_MCM_Defaults'.default.INDIVIDUAL_CLASS_CONFIG, INDIVIDUAL_CLASS_CONFIG);
+
+	`LOG("Got individual class config.",, 'IRI_CRR');
+	`LOG("Begin validation",, 'IRI_CRR');
 
 	// Validate list of templates
 	for (i = INDIVIDUAL_CLASS_CONFIG.Length - 1; i >= 0; i--)
@@ -207,12 +248,17 @@ simulated function LoadSavedSettings()
 			ClassTemplate.DisplayName == "" ||
 			class'X2EventListener_Officer'.default.SkipSoldierClasses.Find(INDIVIDUAL_CLASS_CONFIG[i].TemplateName) != INDEX_NONE)
 		{
+			`LOG("Removing from the list:" @ INDIVIDUAL_CLASS_CONFIG[i].TemplateName,, 'IRI_CRR');
 			INDIVIDUAL_CLASS_CONFIG.Remove(i, 1);
 		}
 	}
+	`LOG("End validation",, 'IRI_CRR');
 
 	// Officer classes
 	OFFICER_CLASSES = `MCM_CH_GetValue(class'OFF_MCM_Defaults'.default.OFFICER_CLASSES, OFFICER_CLASSES);
+
+	`LOG("Got officer class config.",, 'IRI_CRR');
+	`LOG("Begin validation",, 'IRI_CRR');
 	
 	// Validate list of templates
 	for (i = OFFICER_CLASSES.Length - 1; i >= 0; i--)
@@ -223,14 +269,18 @@ simulated function LoadSavedSettings()
 			ClassTemplate.DisplayName == "" ||
 			class'X2EventListener_Officer'.default.SkipSoldierClasses.Find(OFFICER_CLASSES[i].TemplateName) != INDEX_NONE)
 		{
+			`LOG("Removing from the list:" @ INDIVIDUAL_CLASS_CONFIG[i].TemplateName,, 'IRI_CRR');
 			OFFICER_CLASSES.Remove(i, 1);
 		}
 	}
+	`LOG("End validation",, 'IRI_CRR');
 
 	// Append the arrays with soldier class templates that are not there already.
 	ClassTemplates = Mgr.GetAllSoldierClassTemplates(true);
 	NewIndividualConfig.RankNameSet = "Default";
 	NewIndividualConfig.RankIconSet = "Default";
+
+	`LOG("Got all soldier class templates, begin building lists.",, 'IRI_CRR');
 
 	foreach ClassTemplates(ClassTemplate)
 	{
@@ -239,16 +289,20 @@ simulated function LoadSavedSettings()
 
 		if (OFFICER_CLASSES.Find('TemplateName', ClassTemplate.DataName) == INDEX_NONE)
 		{
+			`LOG("Adding to the officer class list:" @ ClassTemplate.DataName,, 'IRI_CRR');
 			ClassIsOfficer.TemplateName = ClassTemplate.DataName;
 			OFFICER_CLASSES.AddItem(ClassIsOfficer);
 		}
 
 		if (INDIVIDUAL_CLASS_CONFIG.Find('TemplateName', ClassTemplate.DataName) == INDEX_NONE)
 		{
+			`LOG("Adding to the individual class config list:" @ ClassTemplate.DataName,, 'IRI_CRR');
 			NewIndividualConfig.TemplateName = ClassTemplate.DataName;
 			INDIVIDUAL_CLASS_CONFIG.AddItem(NewIndividualConfig);
 		}
 	}
+
+	`LOG("Finished building lists." @ OFFICER_CLASSES.Length @ INDIVIDUAL_CLASS_CONFIG.Length,, 'IRI_CRR');
 
 	SyncLoc();
 }
@@ -330,17 +384,23 @@ simulated function SaveButtonClicked(MCM_API_SettingsPage Page)
 
 simulated function SyncLoc()
 {
+	`LOG(self.Class.Name @ GetFuncName(),, 'IRI_CRR');
+
 	loc_OFFICER_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(OFFICER_RANK_NAME_SET);
 	loc_SOLDIER_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(SOLDIER_RANK_NAME_SET);
 	loc_REAPER_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(REAPER_RANK_NAME_SET);
 	loc_SKIRMISHER_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(SKIRMISHER_RANK_NAME_SET);
 	loc_TEMPLAR_RANK_NAME_SET = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(TEMPLAR_RANK_NAME_SET);
 
+	`LOG("Done for rank name sets",, 'IRI_CRR');
+
 	loc_OFFICER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(OFFICER_RANK_ICON_SET);
 	loc_SOLDIER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(SOLDIER_RANK_ICON_SET);
 	loc_REAPER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(REAPER_RANK_ICON_SET);
 	loc_SKIRMISHER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(SKIRMISHER_RANK_ICON_SET);
 	loc_TEMPLAR_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(TEMPLAR_RANK_ICON_SET);
+
+	`LOG("Done for rank icon sets",, 'IRI_CRR');
 }
 
 // Doesn't seem to work

@@ -4,6 +4,8 @@ event OnInit (UIScreen Screen)
 {
 	local OFF_MCM_Screen MCMScreen;
 
+	`LOG(self.Class.Name @ GetFuncName(),, 'IRI_CRR');
+
 	if (ScreenClass == none)
 	{
 		if (MCM_API(Screen) != none)
@@ -16,6 +18,7 @@ event OnInit (UIScreen Screen)
 		}
 	}
 
+	`LOG("Creating OFF_MCM_Screen",, 'IRI_CRR');
 	MCMScreen = new class'OFF_MCM_Screen';
 	MCMScreen.OnInit(Screen);
 }
