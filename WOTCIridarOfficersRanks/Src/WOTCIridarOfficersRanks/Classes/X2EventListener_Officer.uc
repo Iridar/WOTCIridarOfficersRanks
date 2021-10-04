@@ -429,7 +429,7 @@ static final function bool GetIndividualConfigRankIconSetName(const name Soldier
 	Index = IndividualConfig.Find('TemplateName', SoldierClassName);
 	if (Index != INDEX_NONE)
 	{
-		switch (IndividualConfig[Index].RankNameSet)
+		switch (IndividualConfig[Index].RankIconSet)
 		{
 		case "":
 		case "Default":
