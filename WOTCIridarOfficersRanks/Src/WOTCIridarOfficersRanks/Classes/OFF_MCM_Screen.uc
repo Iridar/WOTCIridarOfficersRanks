@@ -8,6 +8,7 @@ var localized string str_GROUP_RANK_ICONS;
 var localized string str_GROUP_RANK_NAMES;
 var localized string str_INDIVIDUAL_CONFIG;
 var localized string str_GROUP_OFFICER_CLASSES;
+var localized string MARK_OFFICER_IN_SQUAD_SELECT_Tip_LWOTC;
 
 var localized string strNoReplacement;
 var localized string strDefault;
@@ -90,6 +91,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	local array<string> RankIconOptions;
 	local array<string> RankNameOptions;
 
+	local bool bLWOTC;
 	local X2SoldierClassTemplateManager	Mgr;
 	local X2SoldierClassTemplate		ClassTemplate;
 	local string						SetLocName;
@@ -118,7 +120,11 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	// # General Settings
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_0', str_GROUP_GENERAL_SETTINGS);
 	`MCM_API_AutoAddCheckBox(Group, REPLACE_CLASS_UNIQUE_RANKS);	
-	`MCM_API_AutoAddCheckBox(Group, MARK_OFFICER_IN_SQUAD_SELECT);	
+
+	bLWOTC = IsModActive('LongWarOfTheChosen');
+	Group.AddCheckbox('MARK_OFFICER_IN_SQUAD_SELECT', MARK_OFFICER_IN_SQUAD_SELECT_Label, 
+		bLWOTC ? MARK_OFFICER_IN_SQUAD_SELECT_Tip_LWOTC : MARK_OFFICER_IN_SQUAD_SELECT_Tip, 
+		bLWOTC ? false : MARK_OFFICER_IN_SQUAD_SELECT, MARK_OFFICER_IN_SQUAD_SELECT_SaveHandler).SetEditable(!bLWOTC);
 
 	// # Rank Name Sets - Global Config
 	Group = Page.AddGroup('IRI_Officers_MCM_Group_A', str_GROUP_RANK_NAMES);	
@@ -380,6 +386,32 @@ simulated function SyncLoc()
 	loc_REAPER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(REAPER_RANK_ICON_SET);
 	loc_SKIRMISHER_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(SKIRMISHER_RANK_ICON_SET);
 	loc_TEMPLAR_RANK_ICON_SET = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(TEMPLAR_RANK_ICON_SET);
+}
+
+static final function bool ShouldMarkOfficerInSquadSelect()
+{
+	if (IsModActive('LongWarOfTheChosen'))
+	{
+		return false;
+	}
+	return `GETMCMVAR(MARK_OFFICER_IN_SQUAD_SELECT);
+}
+
+static final function bool IsModActive(name ModName)
+{
+    local XComOnlineEventMgr    EventManager;
+    local int                   Index;
+
+    EventManager = `ONLINEEVENTMGR;
+
+    for (Index = EventManager.GetNumDLC() - 1; Index >= 0; Index--) 
+    {
+        if (EventManager.GetDLCNames(Index) == ModName) 
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Doesn't seem to work

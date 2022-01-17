@@ -56,7 +56,7 @@ static function EventListenerReturn OnrjSquadSelect_ExtraInfo(Object EventData, 
 	Tuple = LWTuple(EventData);
 	
 	// Check that we are interested in actually doing something
-	if (!`GETMCMVAR(MARK_OFFICER_IN_SQUAD_SELECT) || Tuple == none || Tuple.Id != 'rjSquadSelect_ExtraInfo') return ELR_NoInterrupt;
+	if (!class'OFF_MCM_Screen'.static.ShouldMarkOfficerInSquadSelect() || Tuple == none || Tuple.Id != 'rjSquadSelect_ExtraInfo') return ELR_NoInterrupt;
 
 	SlotIndex = Tuple.Data[0].i;
 
