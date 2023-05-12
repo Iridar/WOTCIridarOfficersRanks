@@ -118,7 +118,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
     //Page.EnableResetButton(ResetButtonClicked);
 
 	// # General Settings
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_0', str_GROUP_GENERAL_SETTINGS);
+	Group = Page.AddGroup('IRI_Officers_MCM_Group_0', `CAPS(str_GROUP_GENERAL_SETTINGS));
 	`MCM_API_AutoAddCheckBox(Group, REPLACE_CLASS_UNIQUE_RANKS);	
 
 	bLWOTC = IsModActive('LongWarOfTheChosen');
@@ -127,7 +127,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 		bLWOTC ? false : MARK_OFFICER_IN_SQUAD_SELECT, MARK_OFFICER_IN_SQUAD_SELECT_SaveHandler).SetEditable(!bLWOTC);
 
 	// # Rank Name Sets - Global Config
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_A', str_GROUP_RANK_NAMES);	
+	Group = Page.AddGroup('IRI_Officers_MCM_Group_A', `CAPS(str_GROUP_RANK_NAMES));	
 
 	`MCM_API_AutoAddDropdown(Group, loc_OFFICER_RANK_NAME_SET, RankNameOptions);
 	`MCM_API_AutoAddDropdown(Group, loc_SOLDIER_RANK_NAME_SET, RankNameOptions);
@@ -136,7 +136,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	`MCM_API_AutoAddDropdown(Group, loc_TEMPLAR_RANK_NAME_SET, RankNameOptions);
 
 	// # Rank Icon Sets
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_B', str_GROUP_RANK_ICONS);	
+	Group = Page.AddGroup('IRI_Officers_MCM_Group_B', `CAPS(str_GROUP_RANK_ICONS));	
 
 	`MCM_API_AutoAddDropdown(Group, loc_OFFICER_RANK_ICON_SET, RankIconOptions);
 	`MCM_API_AutoAddDropdown(Group, loc_SOLDIER_RANK_ICON_SET, RankIconOptions);
@@ -145,7 +145,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	`MCM_API_AutoAddDropdown(Group, loc_TEMPLAR_RANK_ICON_SET, RankIconOptions);
 
 	// # Rank Name Sets - Individual config
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_C', str_GROUP_RANK_NAMES $ str_INDIVIDUAL_CONFIG);
+	Group = Page.AddGroup('IRI_Officers_MCM_Group_C', `CAPS(str_GROUP_RANK_NAMES $ str_INDIVIDUAL_CONFIG));
 
 	RankNameOptions.InsertItem(0, strDefault);
 	for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
@@ -168,7 +168,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	}
 
 	// # Rank Icon Sets - Individual config
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_D', str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG);
+	Group = Page.AddGroup('IRI_Officers_MCM_Group_D', `CAPS(str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG));
 
 	RankIconOptions.InsertItem(0, strDefault);
 	for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
@@ -186,12 +186,12 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 			Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
 			Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
 			Page.SetSaveHandler(SaveButtonClicked);
-			Group = Page.AddGroup('IRI_Officers_MCM_Group_D', str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG);
+			Group = Page.AddGroup('IRI_Officers_MCM_Group_D', `CAPS(str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG));
 		}
 	}
 
 	// # Officer classes
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_E', str_GROUP_OFFICER_CLASSES);
+	Group = Page.AddGroup('IRI_Officers_MCM_Group_E', `CAPS(str_GROUP_OFFICER_CLASSES));
 
 	for (i = 0; i < OFFICER_CLASSES.Length; i++)
 	{
@@ -207,7 +207,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 			Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
 			Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
 			Page.SetSaveHandler(SaveButtonClicked);
-			Group = Page.AddGroup('IRI_Officers_MCM_Group_E', str_GROUP_OFFICER_CLASSES);
+			Group = Page.AddGroup('IRI_Officers_MCM_Group_E', `CAPS(str_GROUP_OFFICER_CLASSES));
 		}
 	}
 
