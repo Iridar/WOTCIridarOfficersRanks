@@ -95,12 +95,12 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	local X2SoldierClassTemplateManager	Mgr;
 	local X2SoldierClassTemplate		ClassTemplate;
 	local string						SetLocName;
-	local int							iNumEntries;
-	local int							iNumPages;
+	//local int							iNumEntries;
+	//local int							iNumPages;
 	local int i;
 
 	// # Internal Init
-	iNumPages = 1;
+	//iNumPages = 1;
 	Mgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 
 	RankNameOptions.AddItem(strNoReplacement);
@@ -144,73 +144,75 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	`MCM_API_AutoAddDropdown(Group, loc_SKIRMISHER_RANK_ICON_SET, RankIconOptions);
 	`MCM_API_AutoAddDropdown(Group, loc_TEMPLAR_RANK_ICON_SET, RankIconOptions);
 
-	// # Rank Name Sets - Individual config
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_C', `CAPS(str_GROUP_RANK_NAMES $ str_INDIVIDUAL_CONFIG));
-
-	RankNameOptions.InsertItem(0, strDefault);
-	for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
+	if (INDIVIDUAL_CLASS_CONFIG.Length * 2 + OFFICER_CLASSES.Length < 200)
 	{
-		ClassTemplate = Mgr.FindSoldierClassTemplate(INDIVIDUAL_CLASS_CONFIG[i].TemplateName);
-		SetLocName = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankNameSet);
-		Group.AddDropdown(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ ClassTemplate.DataName $ ")", strClassIndividualConfigTooltip, RankNameOptions, SetLocName, IndividualSoldierClassHandler_RankName);
-		iNumEntries++;
-		if (iNumEntries > 200)
-		{
-			iNumEntries = 0;
-			iNumPages++;
-			Page.ShowSettings();
+		// # Rank Name Sets - Individual config
+		Group = Page.AddGroup('IRI_Officers_MCM_Group_C', `CAPS(str_GROUP_RANK_NAMES $ str_INDIVIDUAL_CONFIG));
 
-			Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
-			Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
-			Page.SetSaveHandler(SaveButtonClicked);
-			Group = Page.AddGroup('IRI_Officers_MCM_Group_C', str_GROUP_RANK_NAMES $ str_INDIVIDUAL_CONFIG);
+		RankNameOptions.InsertItem(0, strDefault);
+		for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
+		{
+			ClassTemplate = Mgr.FindSoldierClassTemplate(INDIVIDUAL_CLASS_CONFIG[i].TemplateName);
+			SetLocName = class'X2RankNameTemplateManager'.static.GetRankNameTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankNameSet);
+			Group.AddDropdown(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ ClassTemplate.DataName $ ")", strClassIndividualConfigTooltip, RankNameOptions, SetLocName, IndividualSoldierClassHandler_RankName);
+			//iNumEntries++;
+			//if (iNumEntries > 200)
+			//{
+			//	iNumEntries = 0;
+			//	iNumPages++;
+			//	Page.ShowSettings();
+			//
+			//	Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
+			//	Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
+			//	Page.SetSaveHandler(SaveButtonClicked);
+			//	Group = Page.AddGroup('IRI_Officers_MCM_Group_C', str_GROUP_RANK_NAMES $ str_INDIVIDUAL_CONFIG);
+			//}
+		}
+
+		// # Rank Icon Sets - Individual config
+		Group = Page.AddGroup('IRI_Officers_MCM_Group_D', `CAPS(str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG));
+
+		RankIconOptions.InsertItem(0, strDefault);
+		for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
+		{
+			ClassTemplate = Mgr.FindSoldierClassTemplate(INDIVIDUAL_CLASS_CONFIG[i].TemplateName);
+			SetLocName = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankIconSet);
+			Group.AddDropdown(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ ClassTemplate.DataName $ ")", strClassIndividualConfigTooltip, RankIconOptions, SetLocName, IndividualSoldierClassHandler_RankIcon);
+			//iNumEntries++;
+			//if (iNumEntries > 200)
+			//{
+			//	iNumEntries = 0;
+			//	iNumPages++;
+			//	Page.ShowSettings();
+			//
+			//	Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
+			//	Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
+			//	Page.SetSaveHandler(SaveButtonClicked);
+			//	Group = Page.AddGroup('IRI_Officers_MCM_Group_D', `CAPS(str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG));
+			//}
+		}
+
+		// # Officer classes
+		Group = Page.AddGroup('IRI_Officers_MCM_Group_E', `CAPS(str_GROUP_OFFICER_CLASSES));
+
+		for (i = 0; i < OFFICER_CLASSES.Length; i++)
+		{
+			ClassTemplate = Mgr.FindSoldierClassTemplate(OFFICER_CLASSES[i].TemplateName);
+			Group.AddCheckbox(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ OFFICER_CLASSES[i].TemplateName $ ")", strOfficerClassTooltip, OFFICER_CLASSES[i].bOfficer, OfficerClassCheckboxHandler);
+			//iNumEntries++;
+			//if (iNumEntries > 200)
+			//{
+			//	iNumEntries = 0;
+			//	iNumPages++;
+			//	Page.ShowSettings();
+			//
+			//	Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
+			//	Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
+			//	Page.SetSaveHandler(SaveButtonClicked);
+			//	Group = Page.AddGroup('IRI_Officers_MCM_Group_E', `CAPS(str_GROUP_OFFICER_CLASSES));
+			//}
 		}
 	}
-
-	// # Rank Icon Sets - Individual config
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_D', `CAPS(str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG));
-
-	RankIconOptions.InsertItem(0, strDefault);
-	for (i = 0; i < INDIVIDUAL_CLASS_CONFIG.Length; i++)
-	{
-		ClassTemplate = Mgr.FindSoldierClassTemplate(INDIVIDUAL_CLASS_CONFIG[i].TemplateName);
-		SetLocName = class'X2IconSetTemplateManager'.static.GetIconSetTemplateLocName(INDIVIDUAL_CLASS_CONFIG[i].RankIconSet);
-		Group.AddDropdown(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ ClassTemplate.DataName $ ")", strClassIndividualConfigTooltip, RankIconOptions, SetLocName, IndividualSoldierClassHandler_RankIcon);
-		iNumEntries++;
-		if (iNumEntries > 200)
-		{
-			iNumEntries = 0;
-			iNumPages++;
-			Page.ShowSettings();
-
-			Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
-			Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
-			Page.SetSaveHandler(SaveButtonClicked);
-			Group = Page.AddGroup('IRI_Officers_MCM_Group_D', `CAPS(str_GROUP_RANK_ICONS $ str_INDIVIDUAL_CONFIG));
-		}
-	}
-
-	// # Officer classes
-	Group = Page.AddGroup('IRI_Officers_MCM_Group_E', `CAPS(str_GROUP_OFFICER_CLASSES));
-
-	for (i = 0; i < OFFICER_CLASSES.Length; i++)
-	{
-		ClassTemplate = Mgr.FindSoldierClassTemplate(OFFICER_CLASSES[i].TemplateName);
-		Group.AddCheckbox(ClassTemplate.DataName, ClassTemplate.DisplayName @ "(" $ OFFICER_CLASSES[i].TemplateName $ ")", strOfficerClassTooltip, OFFICER_CLASSES[i].bOfficer, OfficerClassCheckboxHandler);
-		iNumEntries++;
-		if (iNumEntries > 200)
-		{
-			iNumEntries = 0;
-			iNumPages++;
-			Page.ShowSettings();
-
-			Page = ConfigAPI.NewSettingsPage(str_MOD_LABEL @ iNumPages);
-			Page.SetPageTitle("Iridar's Cosmetic Rank Replacer" @ iNumPages);
-			Page.SetSaveHandler(SaveButtonClicked);
-			Group = Page.AddGroup('IRI_Officers_MCM_Group_E', `CAPS(str_GROUP_OFFICER_CLASSES));
-		}
-	}
-
     Page.ShowSettings();
 }
 
