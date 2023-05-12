@@ -1,1 +1,6 @@
-This is a text file.
+{
+    "sfStandalone": [
+        "PackageName1",
+		"PackageName2"
+    ]
+}
